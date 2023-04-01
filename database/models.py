@@ -1,17 +1,11 @@
 from sqlalchemy import Column, Boolean, String, Integer
-from sqlalchemy.sql import func
-
 from .database import Base
 
 
 class Video(Base):
     __tablename__ = 'videos'
 
-    id = Column(Integer,
-                primary_key=True,
-                index=True,
-                server_default=func.nextval('tags_id_seq'))
-    sku = Column(String, unique=True, index=True)
+    sku = Column(String, unique=True, index=True, primary_key=True)
     path = Column(String)
     actress = Column(String)
     studio = Column(String)

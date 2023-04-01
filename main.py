@@ -17,6 +17,15 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
+# Helper Function
+def check_exists(sku: str, db: Session = Depends(get_db)):
+    video = crud.get_video_by_sku(db, sku)
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+    return video
+
+
+# Begin Routes
 @app.get("/")
 def home():
     return {"Hello": "world!"}
@@ -39,7 +48,7 @@ def read_single_video(sku: str, db: Session = Depends(get_db)):
     return video
 
 
-# Add Videos
+# Add all Videos
 @app.get("/check/all", response_model=List[schemas.Video])
 def check_folder(db: Session = Depends(get_db)):
     # Getting all videos in database
@@ -62,12 +71,21 @@ def check_folder(db: Session = Depends(get_db)):
     return crud.get_all_videos(db)
 
 
+# Add one video by sku
+@app.post("/add/{sku}", response_model=schemas.Video)
+def add_video_by_sku(sku: str, db: Session = Depends(get_db)):
+    video = crud.get_video_by_sku(db, sku)
+    if video:
+        raise HTTPException(status_code=400,
+                            detail="Video already registered")
+    video = schemas.VideoCreate(sku=sku)
+    return crud.create_video(db, video)
+
+
 # Update Video
 @app.put("/edit/{sku}", response_model=schemas.Video)
 def update_video(sku: str, video_update: schemas.VideoUpdate, db: Session = Depends(get_db)):
-    video = crud.get_video_by_sku(db, sku)
-    if not video:
-        raise HTTPException(status_code=404, detail="Video not found")
+    video = check_exists(sku, db)
     # Parse video info from wiki
     dic = get_info.get_video_info(sku)
     is_dmm = True if get_info.split_sku(
@@ -84,9 +102,7 @@ def update_video(sku: str, video_update: schemas.VideoUpdate, db: Session = Depe
 # Delete Video
 @app.delete("/{sku}")
 def delete_video_by_sku(sku: str, db: Session = Depends(get_db)):
-    video = crud.get_video_by_sku(db, sku)
-    if not video:
-        raise HTTPException(status_code=404, detail="Video not found")
+    video = check_exists(sku, db)
     db.delete(video)
     db.commit()
     return {"message": f"{sku} successfully deleted"}
@@ -96,9 +112,7 @@ def delete_video_by_sku(sku: str, db: Session = Depends(get_db)):
 @app.get("/play/{sku}")
 async def video_stream(sku: str, req: Request, db: Session = Depends(get_db)):
     # Check if the video is in the database
-    video = crud.get_video_by_sku(db, sku)
-    if not video:
-        raise HTTPException(status_code=404, detail="Video not found")
+    video = check_exists(sku, db)
     # Get the path of the video
     path = video.path
     # Return stream data in chunks as the video play

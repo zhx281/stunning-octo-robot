@@ -1,3 +1,4 @@
+import uuid
 from typing import List, Union, Optional
 from pydantic import BaseModel
 
@@ -21,7 +22,6 @@ class VideoCreate(VideoBase):
 
 
 class Video(VideoBase):
-    id: int
     newly_added: bool
     view_count: int
 
