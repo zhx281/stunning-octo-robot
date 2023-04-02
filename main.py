@@ -92,6 +92,7 @@ def update_video(sku: str, video_update: schemas.VideoUpdate, db: Session = Depe
     is_dmm = True if get_info.split_sku(
         sku)[1] not in ['abp', 'abw'] else False
     dic['cover_image'] = get_info.get_images(sku, is_dmm=is_dmm)
+    # dic['path'] = video.path
     # Assign values to video_update
     for k, v in dic.items():
         setattr(video_update, k, v)

@@ -32,7 +32,6 @@ class Video(VideoBase):
 
 
 class VideoUpdate(BaseModel):
-    path: Optional[str] = None
     actress: Optional[str] = None
     studio: Optional[str] = None
     release_date: Optional[str] = None
