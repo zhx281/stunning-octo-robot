@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import FastAPI, Request, Depends, HTTPException
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
@@ -118,3 +119,13 @@ async def video_stream(sku: str, req: Request, db: Session = Depends(get_db)):
     # Return stream data in chunks as the video play
     # with the request header informatiom as the timestamp
     return range_requests_response(req, path, "video/mp4")
+
+
+# Load Cover Image
+@app.get("/image/{sku}")
+def display_cover_image(sku: str, db: Session = Depends(get_db)):
+    video = check_exists(sku, db)
+    if video.cover_image == 'string' or video.cover_image is None:
+        raise HTTPException(status_code=404,
+                            detail="Cover image not found")
+    return FileResponse(video.cover_image, media_type='image/jpg')
