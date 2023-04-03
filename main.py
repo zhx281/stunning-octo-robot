@@ -1,6 +1,7 @@
 from typing import List
 from fastapi import FastAPI, Request, Depends, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 
@@ -16,6 +17,8 @@ load_dotenv()
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
 
 
 # Helper Function
@@ -34,9 +37,13 @@ def home():
 
 # Get All videos
 @app.get("/videos", response_model=List[schemas.Video])
-def read_videos(db: Session = Depends(get_db)):
+def read_videos(req: Request, db: Session = Depends(get_db)):
     videos = crud.get_all_videos(db)
-    return videos
+    if not videos:
+        raise HTTPException(status_code=400, detail="No video found")
+    return templates.TemplateResponse("videoHome.html",
+                                      {'request': req,
+                                       'videos': videos})
 
 
 # Get single video
@@ -84,8 +91,8 @@ def add_video_by_sku(sku: str, db: Session = Depends(get_db)):
 
 
 # Update Video
-@app.put("/edit/{sku}", response_model=schemas.Video)
-def update_video(sku: str, video_update: schemas.VideoUpdate, db: Session = Depends(get_db)):
+@app.get("/edit/{sku}", response_model=schemas.Video)
+def update_video(sku: str, db: Session = Depends(get_db)):
     video = check_exists(sku, db)
     # Parse video info from wiki
     dic = get_info.get_video_info(sku)
@@ -94,11 +101,12 @@ def update_video(sku: str, video_update: schemas.VideoUpdate, db: Session = Depe
     dic['cover_image'] = get_info.get_images(sku, is_dmm=is_dmm)
     # dic['path'] = video.path
     # Assign values to video_update
+    video_update = schemas.VideoInfoUpdate()
     for k, v in dic.items():
         setattr(video_update, k, v)
     # Assign update to video
     video = crud.update_video(video, db, video_update)
-    return video
+    return RedirectResponse("/videos")
 
 
 # Delete Video

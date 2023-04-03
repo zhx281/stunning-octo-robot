@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome</title>
+  </head>
+  <body>
+    <ul>
+      {% for video in videos %}
+      <li>
+        <div sytle="display:inline;">
+          <div style="display: inline-block">
+            <p>
+              <strong>{{ video.sku }}</strong>
+              <small> {{ video.release_date}} </small>
+              <small> {{ video.actress}} </small>
+            </p>
+          </div>
+          <div style="display: inline-block">
+            {% if not video.release_date: %}
+            <button>
+              <a href="/edit/{{ video.sku }}">update info</a>
+            </button>
+            {% endif %} {% if video.cover_image: %}
+            <button>
+              <a href="/image/{{ video.sku }}">view cover</a>
+            </button>
+            {% endif %}
+            <button>
+              <a href="/play/{{ video.sku }}">play video</a>
+            </button>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

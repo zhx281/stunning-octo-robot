@@ -31,12 +31,13 @@ class Video(VideoBase):
         orm_mode = True
 
 
-class VideoUpdate(BaseModel):
+class VideoInfoUpdate(BaseModel):
     actress: Optional[str] = None
     studio: Optional[str] = None
     release_date: Optional[str] = None
     duration: Optional[int] = None
     cover_image: Optional[str] = None
-    newly_added: Optional[bool] = None
-    view_count: Optional[int] = None
+
+
+class VideoImagesUpdate(BaseModel):
     images: Optional[str] = None
