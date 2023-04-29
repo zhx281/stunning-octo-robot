@@ -46,9 +46,9 @@ def read_videos(req: Request, db: Session = Depends(get_db)):
                                        'videos': videos})
 
 
-# Get All videos with the same Actress
+# Display All Video with the Same Actress
 @app.get("/actress/{name}", response_model=List[schemas.Video])
-def read_actress_videos(name: str, req: Request, db: Session = Depends(get_db)):
+def read_actress(name: str, req: Request, db: Session = Depends(get_db)):
     videos = crud.get_all_videos_by_attr(db, name)
     if not videos:
         raise HTTPException(status_code=400, detail="No video found")
