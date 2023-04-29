@@ -3,7 +3,7 @@ from . import models, schemas
 
 
 def get_all_videos(db: Session):
-    return db.query(models.Video).all()
+    return db.query(models.Video).order_by(models.Video.sku).all()
 
 
 def get_video_by_sku(db: Session, sku: str):
@@ -12,8 +12,8 @@ def get_video_by_sku(db: Session, sku: str):
 
 def get_all_videos_by_attr(db: Session, name: str, is_search_by_studio: bool = False):
     if is_search_by_studio:
-        return db.query(models.Video).filter(models.Video.studio == name).all()
-    return db.query(models.Video).filter(models.Video.actress == name).all()
+        return db.query(models.Video).filter(models.Video.studio == name).order_by(models.Video.sku).all()
+    return db.query(models.Video).filter(models.Video.actress == name).order_by(models.Video.sku).all()
 
 
 def create_video(db: Session, video: schemas.VideoCreate):
