@@ -46,6 +46,17 @@ def read_videos(req: Request, db: Session = Depends(get_db)):
                                        'videos': videos})
 
 
+# Get All videos with the same Actress
+@app.get("/actress/{name}", response_model=List[schemas.Video])
+def read_actress_videos(name: str, req: Request, db: Session = Depends(get_db)):
+    videos = crud.get_all_videos_by_attr(db, name)
+    if not videos:
+        raise HTTPException(status_code=400, detail="No video found")
+    return templates.TemplateResponse("videoHome.html",
+                                      {'request': req,
+                                       'videos': videos})
+
+
 # Get single video
 @app.get("/{sku}", response_model=schemas.Video)
 def read_single_video(sku: str, db: Session = Depends(get_db)):
