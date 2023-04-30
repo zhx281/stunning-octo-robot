@@ -21,27 +21,40 @@
         <div class="col">
           <div class="card shadow-sm">
             <img src="/image/{{ video.sku }}" alt="{{ video.sku }}" />
-          </div>
-          <div class="card-body">
-            <p class="card-text">
-              <strong>{{ video.sku }}</strong>
-            </p>
-            <div class="d-flex justify-content-between align-items-centers">
-              <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-outline-secondary">
-                  <a href="/play/{{ video.sku }}">Play</a>
-                </button>
-                {% if not video.actress %}
-                <button type="button" class="btn btn-sm btn-outline-secondary">
-                  <a href="/edit/{{ video.sku }}">Edit</a>
-                </button>
-                {% else %}
-                <button type="button" class="btn btn-sm btn-outline-secondary">
-                  <a href="/actress/{{ video.actress }}">{{ video.actress }}</a>
-                </button>
-                {% endif %}
+            <div class="card-body">
+              <p class="card-text">
+                <strong>{{ video.sku }}</strong>
+              </p>
+              <div class="d-flex justify-content-between align-items-centers">
+                <div class="btn-group">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <a href="/play/{{ video.sku }}">Play</a>
+                  </button>
+                  {% if not video.actress %}
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <a href="/edit/{{ video.sku }}">Edit</a>
+                  </button>
+                  {% else %}
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <a href="/actress/{{ video.actress }}"
+                      >{{ video.actress }}</a
+                    >
+                  </button>
+                  {% endif %}
+                </div>
+                <small class="text-body-secondary"
+                  >{{ video.release_date}}</small
+                >
               </div>
-              <small class="text-body-secondary">{{ video.release_date}}</small>
             </div>
           </div>
         </div>
