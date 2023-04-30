@@ -1,5 +1,5 @@
-from typing import List
-from fastapi import FastAPI, Request, Depends, HTTPException
+from typing import List, Annotated
+from fastapi import FastAPI, Request, Depends, HTTPException, Form, status
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -57,6 +57,17 @@ def read_actress(name: str, req: Request, db: Session = Depends(get_db)):
                                        'videos': videos})
 
 
+# Get single video info
+@app.get("/info/{sku}", response_model=schemas.Video)
+def read_video_info(sku: str, req: Request, db: Session = Depends(get_db)):
+    video = crud.get_video_by_sku(db, sku)
+    if not video:
+        raise HTTPException(status_code=400, detail="No video found")
+    return templates.TemplateResponse("updateForm.html",
+                                      {'request': req,
+                                       'video': video})
+
+
 # Get single video
 @app.get("/{sku}", response_model=schemas.Video)
 def read_single_video(sku: str, db: Session = Depends(get_db)):
@@ -87,7 +98,7 @@ def check_folder(db: Session = Depends(get_db)):
         db_video = schemas.VideoCreate(sku=f"{c}-{n}",
                                        path=get_info.get_path(v))
         crud.create_video(db, db_video)
-    return crud.get_all_videos(db)
+    return RedirectResponse("/videos")
 
 
 # Add one video by sku
@@ -99,6 +110,28 @@ def add_video_by_sku(sku: str, db: Session = Depends(get_db)):
                             detail="Video already registered")
     video = schemas.VideoCreate(sku=sku)
     return crud.create_video(db, video)
+
+
+# update video info by sku
+@app.post("/update/{sku}", response_model=schemas.Video)
+async def update_video_by_sku(sku: str,
+                              req: Request,
+                              db: Session = Depends(get_db)):
+    video = crud.get_video_by_sku(db, sku)
+    if not video:
+        raise HTTPException(status_code=400,
+                            detail="Video not found")
+    form = await req.form()
+    if form.get('actress') != "":
+        video.actress = form.get('actress')
+    if form.get('release_date') != "":
+        video.release_date = form.get('release_date')
+    # Assign values to video_update
+    video = crud.simple_update(video, db)
+    headers = {'Location': '/videos'}
+    return RedirectResponse(url="/videos",
+                            status_code=status.HTTP_303_SEE_OTHER,
+                            headers=headers)
 
 
 # Update Video
@@ -120,7 +153,7 @@ def update_video(sku: str, db: Session = Depends(get_db)):
         setattr(video_update, k, v)
     # Assign update to video
     video = crud.update_video(video, db, video_update)
-    return RedirectResponse("/videos")
+    return RedirectResponse(url="/videos")
 
 
 # Delete Video

@@ -38,7 +38,7 @@
                     type="button"
                     class="btn btn-sm btn-outline-secondary"
                   >
-                    <a href="/edit/{{ video.sku }}">Edit</a>
+                    <a href="/edit/{{ video.sku }}">Get Info</a>
                   </button>
                   {% else %}
                   <button
@@ -50,6 +50,12 @@
                     >
                   </button>
                   {% endif %}
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <a href="/info/{{ video.sku }}">update</a>
+                  </button>
                 </div>
                 <small class="text-body-secondary"
                   >{{ video.release_date}}</small
