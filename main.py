@@ -106,7 +106,10 @@ def add_video_by_sku(sku: str, db: Session = Depends(get_db)):
 def update_video(sku: str, db: Session = Depends(get_db)):
     video = check_exists(sku, db)
     # Parse video info from wiki
-    dic = get_info.get_video_info(sku)
+    try:
+        dic = get_info.get_video_info(sku)
+    except:
+        dic = {}
     is_dmm = True if get_info.split_sku(
         sku)[1] not in ['abp', 'abw'] else False
     dic['cover_image'] = get_info.get_images(sku, is_dmm=is_dmm)
