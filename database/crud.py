@@ -33,6 +33,10 @@ def create_video(db: Session, video: schemas.VideoCreate):
 def update_video(model, db: Session, update_data):
     for k, v in vars(update_data).items():
         setattr(model, k, v)
+    return simple_update(model, db)
+
+
+def simple_update(model, db: Session):
     db.commit()
     db.refresh(model)
     return model
