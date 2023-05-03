@@ -3,11 +3,13 @@
 <!-- Bootstrap Form -->
 <div class="container-sm">
   <form action="/update/{{ video.sku }}" method="POST">
+    {% if video.cover_image %}
     <img
-      src="/image/{{ video.sku }}"
+      src="{{ base_url + video.cover_image }}"
       class="rounded mx-auto d-block"
       alt="{{ video.sku }}"
     />
+    {% else %} {% include "placeholder.html" %} {% endif %}
     <fieldset disabled>
       <div class="mb-3">
         <label for="videoSKU" class="form-label">SKU</label>
@@ -19,26 +21,41 @@
         />
       </div>
     </fieldset>
+
     <div class="mb-3">
       <label for="actress" class="form-label">Actress</label>
       <input type="text" class="form-control" id="actress" name="actress""
       value="{{ video.actress }}" />
     </div>
+
+    {% for k, v in video_dict.items() %} {% if k == 'cover_image' %}
+    <fieldset disabled>
+      <div class="mb-3">
+        <label for="{{ k }}" class="form-label">{{ k }}</label>
+        <input
+          type="text"
+          class="form-control"
+          id="{{ k }}"
+          placeholder="{{ v }}"
+        />
+      </div>
+    </fieldset>
+    {% else %}
     <div class="mb-3">
-      <label for="release_date" class="form-label">ReleaseDate</label>
+      <label for="{{ k }}" class="form-label">{{ k }}</label>
       <input
         type="text"
         class="form-control"
-        id="release_date"
-        name="release_date"
-        value="{{ video.release_date }}"
+        id="{{ k }}"
+        name="{{ k }}"
+        value="{{ v }}"
       />
     </div>
+    {% endif %} {% endfor %}
     <div class="d-flex justify-content-between align-items-centers">
       <button type="submit" class="btn btn-primary">Update</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">
-        <a href="/edit/{{ video.sku }}">Reset</a>
-      </button>
+
+      <a href="/reset/{{ video.sku }}" class="link-danger">Reset</a>
     </div>
   </form>
 </div>
