@@ -1,8 +1,8 @@
 beautifulsoup4
 fastapi
 jinja2
-python-multipart
 python-dotenv
 requests
 SQLAlchemy
 uvicorn
+gunicorn
