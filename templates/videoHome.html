@@ -6,30 +6,40 @@ content %}
     {% for video in videos %}
     <div class="col">
       <div class="card shadow-sm">
-        <img src="/image/{{ video.sku }}" alt="{{ video.sku }}" />
+        {% if video.cover_image %}
+        <img src="{{ base_url + video.cover_image }}" alt="{{ video.sku }}" />
+        {% else%}
+        {% include "placeholder.html" %} 
+        {% endif %}
         <div class="card-body">
-          <p class="card-text">
-            <strong>{{ video.sku }}</strong>
+          <p class="card-text ">
+            <div class="d-flex justify-content-between align-items-centers">
+              <strong>{{ video.sku }}</strong>
+              {% if video.images %}
+                <a href="/images/{{ video.sku }}">view sample images</a>
+              {% endif %}
+            </div>
           </p>
           <div class="d-flex justify-content-between align-items-centers">
             <div class="btn-group">
               <button type="button" class="btn btn-sm btn-outline-secondary">
-                <a href="/play/{{ video.sku }}">Play</a>
+                <a href="/videos/play/{{ video.sku }}">Play</a>
               </button>
-              {% if not video.actress %}
+              {% if video.actress == "unknown" %}
               <button type="button" class="btn btn-sm btn-outline-secondary">
-                <a href="/edit/{{ video.sku }}">Get Info</a>
+                <a href="/get/info/{{ video.sku }}">Get Info</a>
               </button>
               {% else %}
               <button type="button" class="btn btn-sm btn-outline-secondary">
-                <a href="/actress/{{ video.actress }}">{{ video.actress }}</a>
+                <a href="/videos/{{ video.actress }}">{{ video.actress }}</a>
               </button>
               {% endif %}
               <button type="button" class="btn btn-sm btn-outline-secondary">
-                <a href="/info/{{ video.sku }}">update</a>
+                <a href="/update/{{ video.sku }}">update</a>
               </button>
             </div>
             <small class="text-body-secondary">{{ video.release_date}}</small>
+            <small class="text-body-secondary">{{ video.duration}} min</small>
           </div>
         </div>
       </div>
@@ -37,4 +47,5 @@ content %}
     {% endfor %}
   </div>
 </div>
+
 {% endblock %}
