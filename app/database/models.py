@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Boolean, String, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -10,6 +10,7 @@ class Actor(Base):
     name = Column(String)
     first_name = Column(String)
     last_name = Column(String)
+    add_on = Column(DateTime, default=func.now())
 
     videos = relationship('Video', back_populates='owner')
 
@@ -21,9 +22,10 @@ class Video(Base):
     path = Column(String)
     actress = Column(String)
     studio = Column(String)
-    release_date = Column(String)
-    duration = Column(String)
+    release_date = Column(DateTime)
+    duration = Column(Integer)
     cover_image = Column(String)
+    add_on = Column(DateTime, default=func.now())
 
     owner_id = Column(Integer, ForeignKey("actors.id"))
     owner = relationship("Actor", back_populates="videos")
@@ -37,6 +39,7 @@ class Image(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
     image = Column(String)
+    add_on = Column(DateTime, default=func.now())
 
     owner_id = Column(String, ForeignKey("videos.sku"))
     owner = relationship("Video", back_populates="images")

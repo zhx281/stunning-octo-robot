@@ -18,14 +18,20 @@ BASE_URL = os.getenv("INFO_SERVICE")
 
 @router.get("/", response_model=list[schemas.Video])
 async def display_all_videos(req: Request, db: Session = Depends(get_db)):
-    # Displaying all videos in Videos directory
-    videos = crud.get_all_videos(db)
+    # Displaying all actress in Actress directory
+    actress = crud.get_all_actress(db)
     # Raise error when there is no video in database
-    if not videos:
+    if not actress:
         raise HTTPException(
             status_code=404,
             detail="There is no video in database."
         )
+    if len(actress) == 1 and actress[0].name == 'unknown':
+        videos = actress[0].videos
+    else:
+        videos = []
+        for act in actress:
+            videos.append(act.videos[-1])
     # Render to Jinja2 Template
     return templates.TemplateResponse("videoHome.html", {
         "request": req,

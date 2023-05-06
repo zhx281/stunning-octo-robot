@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from dotenv import load_dotenv
 
@@ -7,6 +8,7 @@ from .database.database import engine
 
 from .routes import gets, updates, resets, videos, images
 
+from .webparser import get_info
 
 load_dotenv()
 
@@ -25,4 +27,10 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 def root():
-    return {"message": "Welcome"}
+    return RedirectResponse("/videos")
+
+
+@app.get("/test")
+def test():
+    path = '/home/dx/Videos/ipzz-021.mp4'
+    return get_info.get_video_duration(path)

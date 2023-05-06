@@ -20,6 +20,7 @@ content %}
               {% endif %}
             </div>
           </p>
+          <small class="text-body-secondary">Release Date: {{ video.release_date}}</small>
           <div class="d-flex justify-content-between align-items-centers">
             <div class="btn-group">
               <button type="button" class="btn btn-sm btn-outline-secondary">
@@ -38,7 +39,6 @@ content %}
                 <a href="/update/{{ video.sku }}">update</a>
               </button>
             </div>
-            <small class="text-body-secondary">{{ video.release_date}}</small>
             <small class="text-body-secondary">{{ video.duration}} min</small>
           </div>
         </div>

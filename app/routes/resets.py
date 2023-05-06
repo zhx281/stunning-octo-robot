@@ -20,4 +20,6 @@ def reset_video(sku: str, db: Session = Depends(get_db)):
     unknown = crud.get_actress_by_name('unknown', db)
     default = schemas.VideoUpdate()
     crud.update_video(video, unknown, default, db)
+    for image in video.images:
+        crud.delete(image, db)
     return RedirectResponse('/videos')

@@ -1,5 +1,6 @@
 import os
 import requests
+from datetime import datetime
 
 
 def split_sku(sku):
@@ -18,8 +19,23 @@ def get_videos_in_dir():
     return [video for video in os.listdir(os.getenv("VIDEO_PATH")) if video.endswith(".mp4")]
 
 
-# External Parser
 def look_at_informer(sku):
     base = os.getenv("INFO_SERVICE")
     data = requests.get(f"{base}/get/{sku}").json()
     return data
+
+
+def convert_duration(duration):
+    try:
+        return int(duration)
+    except:
+        return 0
+
+
+def convert_release_date(release_date):
+    try:
+        fmt = '%Y-%m-%d' if len(release_date.split(' ')
+                                ) == 1 else '%Y-%m-%d %H:%M:%S'
+        return datetime.strptime(release_date, fmt)
+    except:
+        return datetime.strptime('1999-12-31', '%Y-%m-%d')

@@ -63,8 +63,8 @@ async def get_video_info(sku: str, db: Session = Depends(get_db)):
         # Add info to video update
         video_update = schemas.VideoUpdate(
             studio=info['studio'],
-            duration=info['duration'],
-            release_date=info['release_date'],
+            duration=get_info.convert_duration(info['duration']),
+            release_date=get_info.convert_release_date(info['release_date']),
             cover_image=info['cover_image']
         )
     else:

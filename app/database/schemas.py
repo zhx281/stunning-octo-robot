@@ -1,5 +1,6 @@
+from datetime import datetime
 from typing import Union
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ImageBase(BaseModel):
@@ -18,6 +19,7 @@ class ImageUpdate(ImageBase):
 class Image(ImageBase):
     id: int
     owner_id: str
+    add_on: datetime
 
     class Config:
         orm_mode = True
@@ -25,8 +27,8 @@ class Image(ImageBase):
 
 class VideoBase(BaseModel):
     studio: Union[str, None] = None
-    release_date: Union[str, None] = None
     duration: Union[int, None] = None
+    release_date: Union[datetime, None] = None
     cover_image: Union[str, None] = None
 
 
@@ -41,8 +43,9 @@ class VideoUpdate(VideoBase):
 class Video(VideoBase):
     sku: str
     actress: str
-    path: Union[str, None] = None
+    path: str
     images: list[Image] = []
+    add_on: datetime
     owner_id = int
 
     class Config:
@@ -66,6 +69,7 @@ class ActorUpdate(ActorBase):
 class Actor(ActorBase):
     id: int
     videos: list[Video] = []
+    add_on: datetime
 
     class Config:
         orm_mode = True

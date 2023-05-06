@@ -80,3 +80,8 @@ def add_to_database(model, db: Session):
 def reload(model, db: Session):
     db.refresh(model)
     return model
+
+
+def delete(model, db: Session):
+    db.delete(model)
+    db.commit()

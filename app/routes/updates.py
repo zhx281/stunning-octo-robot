@@ -38,6 +38,8 @@ async def update_video_info(req: Request, sku: str, db: Session = Depends(get_db
         raise HTTPException(status_code=404, detail="Video not found.")
     form = await req.form()
     form = form.__dict__['_dict']
+    form['duration'] = get_info.convert_duration(form['duration'])
+    form['release_date'] = get_info.convert_release_date(form['release_date'])
     actress_name = form.pop('actress')
     # Check if actress change
     if actress_name != video.actress:
