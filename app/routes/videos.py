@@ -31,7 +31,7 @@ async def display_all_videos(req: Request, db: Session = Depends(get_db)):
     else:
         videos = []
         for act in actress:
-            if len(act) > 0:
+            if len(act.videos) > 0:
                 videos.append(act.videos[-1])
     # Render to Jinja2 Template
     return templates.TemplateResponse("videoHome.html", {
