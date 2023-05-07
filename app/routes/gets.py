@@ -26,7 +26,7 @@ async def get_all_videos(db: Session = Depends(get_db)):
     for name in video_list:
         _, a, c = get_info.split_sku(name)
         sku = f"{a}-{c}"
-        path = get_info.get_path(sku)
+        path = get_info.get_path(name)
         video = crud.get_video_by_sku(sku, db)
         if video:
             continue

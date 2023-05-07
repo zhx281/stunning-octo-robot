@@ -24,6 +24,10 @@ def get_video_by_sku(sku: str, db: Session):
     return db.query(models.Video).filter(models.Video.sku == sku).first()
 
 
+def get_video_by_actress(aid: int, db: Session):
+    return db.query(models.Video).filter(models.Video.owner_id == aid).order_by(models.Video.sku).all()
+
+
 def create_video(sku: str, path: str, actor_id: int, actor_name: str, db: Session):
     db_video = models.Video(sku=sku,
                             path=path,

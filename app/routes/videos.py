@@ -49,9 +49,10 @@ async def display_all_videos_by_actress(req: Request,
     actress = crud.get_actress_by_name(actress, db)
     if not actress:
         raise HTTPException(status_code=404, detail="Actress not in database.")
+    videos = crud.get_video_by_actress(actress.id, db)
     return templates.TemplateResponse("videoHome.html", {
         "request": req,
-        "videos": actress.videos,
+        "videos": videos,
         "base_url": BASE_URL
     })
 
@@ -70,5 +71,5 @@ async def play_video(req: Request, sku: str, db: Session = Depends(get_db)):
     # Partial load data to stream video
     return range_requests_response(
         req,
-        f"{video.path}.mp4",
+        f"{video.path}",
         "video/mp4")
