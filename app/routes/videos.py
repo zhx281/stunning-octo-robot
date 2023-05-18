@@ -1,5 +1,7 @@
 import os
+import requests
 from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -16,11 +18,35 @@ templates = Jinja2Templates(directory="templates")
 BASE_URL = os.getenv("INFO_SERVICE")
 
 
+def get_videos(url, videos):
+    skus = [_.sku for _ in videos]
+    items = requests.get(url).json()
+    array = []
+    for item in items:
+        if item['sku'] in skus:
+            array.append(item)
+    return array
+
+
 @router.get("/")
 async def display_all_videos(req: Request, db: Session = Depends(get_db)):
     videos = crud.get_all_videos(db)
     if not videos:
-        return HTTPException(status_code=404, detail='No Video Found')
+        return RedirectResponse('/gets/videos')
+    url = f"{BASE_URL}/all"
+    videos = get_videos(url, videos)
+    return templates.TemplateResponse('videoHome.html', {
+        "request": req,
+        "videos": videos,
+        "base_url": BASE_URL
+    })
+
+
+@router.get("/{actress}")
+async def all_actress_videos(req: Request, actress: str, db: Session = Depends(get_db)):
+    videos = crud.get_all_videos(db)
+    url = f"{BASE_URL}/actress/{actress}"
+    videos = get_videos(url, videos)
     return templates.TemplateResponse('videoHome.html', {
         "request": req,
         "videos": videos,

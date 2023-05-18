@@ -13,6 +13,13 @@ content %}
               <strong>{{ video.sku }}</strong>
             </div>
           </p>
+          <p class="card-text">{{ video.title }}</p>
+          <small>Release Date: {{ video.release_date }}</small>
+          <p class="card-text">
+            {% for actress in video.actress %}
+            <a href="/videos/{{ actress }}">{{ actress }}</a>
+            {% endfor %}
+          </p>
           <div class="d-flex justify-content-between align-items-centers">
             <div class="btn-group">
               <button type="button" class="btn btn-sm btn-outline-secondary">
