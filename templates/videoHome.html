@@ -6,40 +6,22 @@ content %}
     {% for video in videos %}
     <div class="col">
       <div class="card shadow-sm">
-        {% if video.cover_image %}
-        <img src="{{ base_url + video.cover_image }}" alt="{{ video.sku }}" />
-        {% else%}
-        {% include "placeholder.html" %} 
-        {% endif %}
+        <img src="{{ base_url + '/image/' + video.sku }}" alt="{{ video.sku }}" />
         <div class="card-body">
           <p class="card-text ">
             <div class="d-flex justify-content-between align-items-centers">
               <strong>{{ video.sku }}</strong>
-              {% if video.images %}
-                <a href="/images/{{ video.sku }}">view sample images</a>
-              {% endif %}
             </div>
           </p>
-          <small class="text-body-secondary">Release Date: {{ video.release_date}}</small>
           <div class="d-flex justify-content-between align-items-centers">
             <div class="btn-group">
               <button type="button" class="btn btn-sm btn-outline-secondary">
                 <a href="/videos/play/{{ video.sku }}">Play</a>
               </button>
-              {% if video.actress == "unknown" %}
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                <a href="/get/info/{{ video.sku }}">Get Info</a>
-              </button>
-              {% else %}
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                <a href="/videos/{{ video.actress }}">{{ video.actress }}</a>
-              </button>
-              {% endif %}
               <button type="button" class="btn btn-sm btn-outline-secondary">
                 <a href="/update/{{ video.sku }}">update</a>
               </button>
             </div>
-            <small class="text-body-secondary">{{ video.duration}} min</small>
           </div>
         </div>
       </div>
