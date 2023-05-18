@@ -29,10 +29,32 @@ def get_videos(url, videos):
 
 
 @router.get("/")
-async def display_all_videos(req: Request, db: Session = Depends(get_db)):
+async def display_all_actress(req: Request, db: Session = Depends(get_db)):
     videos = crud.get_all_videos(db)
     if not videos:
         return RedirectResponse('/gets/videos')
+    skus = [_.sku for _ in videos]
+    url = f"{BASE_URL}/all"
+    items = requests.get(url).json()
+    videos = []
+    actress_list = []
+    for item in items:
+        if item['sku'] in skus:
+            for actress in item['actress']:
+                if actress in actress_list:
+                    continue
+                actress_list.append(actress)
+                videos.append(item)
+    return templates.TemplateResponse('videoHome.html', {
+        "request": req,
+        "videos": videos,
+        "base_url": BASE_URL
+    })
+
+
+@router.get("/all")
+async def display_all_videos(req: Request, db: Session = Depends(get_db)):
+    videos = crud.get_all_videos(db)
     url = f"{BASE_URL}/all"
     videos = get_videos(url, videos)
     return templates.TemplateResponse('videoHome.html', {
