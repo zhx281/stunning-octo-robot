@@ -30,7 +30,7 @@ content %}
                 </a>
               </button>
             </div>
-            {% if not video.title %}
+            {% if video.path %}
             <button type="button" class="btn btn-sm btn-outline-secondary">
               <a href="/update/{{ video.sku }}">update</a>
             </button>
