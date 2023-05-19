@@ -11,6 +11,9 @@ from ..database.database import get_db
 router = APIRouter(prefix="/get")
 
 
+BASE_URL = os.getenv("INFO_SERVICE")
+
+
 @router.get("/videos")
 async def get_all_videos(db: Session = Depends(get_db), force: bool = False):
     """Get all videos in folders"""
@@ -30,5 +33,5 @@ async def get_all_videos(db: Session = Depends(get_db), force: bool = False):
                 path = os.path.join(video_path, file)
                 crud.create_video(sku=sku, path=path, db=db)
             elif force:
-                requests.post(f'{os.getenv("BASE_URL")}/insert/{sku}')
+                requests.post(f'{BASE_URL}/insert/{sku}')
     return RedirectResponse('/videos')
