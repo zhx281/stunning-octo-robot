@@ -18,7 +18,7 @@ templates = Jinja2Templates(directory="templates")
 BASE_URL = os.getenv("INFO_SERVICE")
 
 
-def get_videos(url, videos):
+def get_videos(url, videos, get_remain=False):
     skus = [_.sku for _ in videos]
     items = requests.get(url).json()
     array = []
@@ -27,10 +27,10 @@ def get_videos(url, videos):
         if item['sku'] in skus:
             array.append(item)
             hit.append(item['sku'])
-
-    for video in videos:
-        if video.sku not in hit:
-            array.append(video)
+    if get_remain:
+        for video in videos:
+            if video.sku not in hit:
+                array.append(video)
     return array
 
 
@@ -57,7 +57,7 @@ async def display_all_actress(req: Request, db: Session = Depends(get_db)):
 async def display_all_videos(req: Request, db: Session = Depends(get_db)):
     videos = crud.get_all_videos(db)
     url = f"{BASE_URL}/all"
-    videos = get_videos(url, videos)
+    videos = get_videos(url, videos, get_remain=True)
     return templates.TemplateResponse('videoHome.html', {
         "request": req,
         "videos": videos,
