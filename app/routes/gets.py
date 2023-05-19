@@ -26,7 +26,7 @@ async def get_all_videos(db: Session = Depends(get_db), force: bool = False):
             if item and not force:
                 continue
             # Setup new item
-            elif not item:
+            elif item is not None:
                 path = os.path.join(video_path, file)
                 crud.create_video(sku=sku, path=path, db=db)
             elif force:
