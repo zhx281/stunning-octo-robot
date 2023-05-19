@@ -43,14 +43,9 @@ async def display_all_actress(req: Request, db: Session = Depends(get_db)):
     url = f"{BASE_URL}/all"
     items = requests.get(url).json()
     videos = []
-    actress_list = []
     for item in items:
         if item['sku'] in skus:
-            for actress in item['actress']:
-                if actress in actress_list:
-                    continue
-                actress_list.append(actress)
-                videos.append(item)
+            videos.append(item)
     return templates.TemplateResponse('videoHome.html', {
         "request": req,
         "videos": videos[:6],
