@@ -30,7 +30,7 @@ def get_videos(url, videos):
 
     for video in videos:
         if video.sku not in hit:
-            array.append(videos)
+            array.append(video)
     return array
 
 
