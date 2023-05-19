@@ -22,9 +22,15 @@ def get_videos(url, videos):
     skus = [_.sku for _ in videos]
     items = requests.get(url).json()
     array = []
+    hit = []
     for item in items:
         if item['sku'] in skus:
             array.append(item)
+            hit.append('sku')
+
+    for video in videos:
+        if video.sku not in hit:
+            array.append(videos)
     return array
 
 
@@ -47,7 +53,7 @@ async def display_all_actress(req: Request, db: Session = Depends(get_db)):
                 videos.append(item)
     return templates.TemplateResponse('videoHome.html', {
         "request": req,
-        "videos": videos,
+        "videos": videos[:6],
         "base_url": BASE_URL
     })
 
