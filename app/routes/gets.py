@@ -1,4 +1,5 @@
 import os
+import time
 import requests
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
@@ -34,4 +35,5 @@ async def get_all_videos(db: Session = Depends(get_db), force: bool = False):
                 crud.create_video(sku=sku, path=path, db=db)
             elif force:
                 requests.post(f'{BASE_URL}/insert/{sku}')
+                time.sleep(1)
     return RedirectResponse('/videos')
