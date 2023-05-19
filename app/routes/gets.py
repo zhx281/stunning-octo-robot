@@ -12,7 +12,7 @@ router = APIRouter(prefix="/get")
 
 
 @router.get("/videos")
-async def get_all_videos(db: Session = Depends(get_db)):
+async def get_all_videos(db: Session = Depends(get_db), force: bool = False):
     """Get all videos in folders"""
     video_path = os.getenv("VIDEO_PATH")
     files = os.listdir(video_path)
@@ -23,10 +23,12 @@ async def get_all_videos(db: Session = Depends(get_db)):
                 sku = sku.replace('-c', '')
             # Check if sku in database
             item = crud.get_video_by_sku(sku, db)
-            if item:
+            if item and not force:
                 continue
             # Setup new item
-            path = os.path.join(video_path, file)
-            crud.create_video(sku=sku, path=path, db=db)
-            requests.post(f'{os.getenv("BASE_URL")}/insert/{sku}')
+            elif not item:
+                path = os.path.join(video_path, file)
+                crud.create_video(sku=sku, path=path, db=db)
+            elif force:
+                requests.post(f'{os.getenv("BASE_URL")}/insert/{sku}')
     return RedirectResponse('/videos')
