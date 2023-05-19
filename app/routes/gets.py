@@ -1,4 +1,5 @@
 import os
+import requests
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
@@ -27,4 +28,5 @@ async def get_all_videos(db: Session = Depends(get_db)):
             # Setup new item
             path = os.path.join(video_path, file)
             crud.create_video(sku=sku, path=path, db=db)
+            requests.post(f'{os.getenv("BASE_URL")}/insert/{sku}')
     return RedirectResponse('/videos')
