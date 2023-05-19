@@ -22,4 +22,4 @@ async def update_video_info(req: Request, sku: str, db: Session = Depends(get_db
     if not video:
         return HTTPException(status_code=404, detail='Video not found')
     requests.post(f"{BASE_URL}/insert/{video.sku}")
-    return RedirectResponse('/videos')
+    return RedirectResponse('/videos/all')
