@@ -26,7 +26,7 @@ def get_videos(url, videos):
     for item in items:
         if item['sku'] in skus:
             array.append(item)
-            hit.append('sku')
+            hit.append(item['sku'])
 
     for video in videos:
         if video.sku not in hit:
