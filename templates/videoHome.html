@@ -13,6 +13,7 @@ content %}
               <strong>{{ video.sku }}</strong>
             </div>
           </p>
+          {% if video.title %}
           <p class="card-text">{{ video.title }}</p>
           <small>Release Date: {{ video.release_date }}</small>
           <p class="card-text">
@@ -20,15 +21,18 @@ content %}
             <a href="/videos/{{ actress }}">{{ actress }}</a>
             {% endfor %}
           </p>
+          {% endif %}
           <div class="d-flex justify-content-between align-items-centers">
             <div class="btn-group">
               <button type="button" class="btn btn-sm btn-outline-secondary">
                 <a href="/videos/play/{{ video.sku }}">Play</a>
               </button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                <a href="/update/{{ video.sku }}">update</a>
-              </button>
             </div>
+            {% if not video.title %}
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              <a href="/update/{{ video.sku }}">update</a>
+            </button>
+            {% endif %}
           </div>
         </div>
       </div>
