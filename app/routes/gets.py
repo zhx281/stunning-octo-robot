@@ -29,4 +29,4 @@ async def get_all_videos(db: Session = Depends(get_db)):
             # Setup new item
             path = os.path.join(video_path, file)
             crud.create_video(sku=sku, path=path, db=db)
-    return RedirectResponse('/videos')
+    return {"Message": "Database has been updated"}

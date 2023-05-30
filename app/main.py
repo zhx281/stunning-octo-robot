@@ -23,4 +23,4 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 def root():
-    return RedirectResponse("/videos")
+    return {"Hello": "World!"}
