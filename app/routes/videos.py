@@ -38,7 +38,7 @@ def get_videos(url, videos, get_remain=False):
 async def display_all_actress(req: Request, db: Session = Depends(get_db)):
     videos = crud.get_all_videos(db)
     if not videos:
-        return RedirectResponse('/gets/videos')
+        return RedirectResponse('/get/videos')
     skus = [_.sku for _ in videos]
     url = f"{BASE_URL}/all"
     items = requests.get(url).json()
