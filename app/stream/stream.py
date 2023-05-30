@@ -46,7 +46,7 @@ def range_requests_response(request: Request, file_path: str, content_type: str)
         "access-control-expose-headers": (
             "content-type, accept-range, content-length, "
             "content-range, content-encoding"
-        )
+        ),
     }
 
     start = 0
