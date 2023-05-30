@@ -6,7 +6,7 @@ from fastapi.responses import StreamingResponse
 
 
 def send_bytes_range_requests(
-    file_obj: BinaryIO, start: int, end: int, chunk_size: int = 10000
+    file_obj: BinaryIO, start: int, end: int, chunk_size: int = 4096
 ):
     with file_obj as f:
         f.seek(start)
