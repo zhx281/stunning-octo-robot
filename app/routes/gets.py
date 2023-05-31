@@ -30,3 +30,11 @@ async def get_all_videos(db: Session = Depends(get_db)):
             path = os.path.join(video_path, file)
             crud.create_video(sku=sku, path=path, db=db)
     return {"Message": "Database has been updated"}
+
+
+@router.get("/reset")
+async def reset_db(db: Session = Depends(get_db)):
+    videos = crud.get_all_videos(db)
+    for video in videos:
+        crud.delete(video, db)
+    return {"Message": "Database reseted"}
