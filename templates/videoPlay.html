@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% block title %} Playing {{ sku }} {% endblock %} {%
+block content %}
+
+<div class="container">
+  <video controls>
+    <source src="/videos/stream/{{ sku }}" type="video/mp4" />
+  </video>
+</div>
+
+{% endblock %}

@@ -6,7 +6,7 @@ from fastapi.responses import StreamingResponse
 
 
 def send_bytes_range_requests(
-    file_obj: BinaryIO, start: int, end: int, chunk_size: int = 4096
+    file_obj: BinaryIO, start: int, end: int, chunk_size: int = 10000
 ):
     with file_obj as f:
         f.seek(start)
@@ -15,7 +15,7 @@ def send_bytes_range_requests(
             yield f.read(read_size)
 
 
-def _get_range_header(range_header: str, file_size: int) -> tuple[int, int]:
+def _get_range_header(file_size: int, range_header: str) -> tuple[int, int]:
     def _invalid_range():
         return HTTPException(
             status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE,
@@ -54,7 +54,7 @@ def range_requests_response(request: Request, file_path: str, content_type: str)
     status_code = status.HTTP_200_OK
 
     if range_header is not None:
-        start, end = _get_range_header(range_header, file_size)
+        start, end = _get_range_header(file_size, range_header)
         size = end - start + 1
         headers["content-length"] = str(size)
         headers["content-range"] = f"bytes {start}-{end}/{file_size}"
