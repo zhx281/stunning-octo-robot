@@ -6,6 +6,8 @@ service file format
 
 Create this file `myapp.service` in `/etc/systemd/system` with `nano` or `vim`
 
+Note: If using port 80, User and Group should be root
+
 ```
 [Unit]
 Description=My Simple App
