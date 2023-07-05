@@ -41,12 +41,12 @@ def range_requests_response(request: Request, file_path: str, content_type: str)
     headers = {
         "content-type": content_type,
         "accept-range": "bytes",
-        "content-encoding": "identity",
+        # "content-encoding": "identity",
         "content-length": str(file_size),
-        "access-control-expose-headers": (
-            "content-type, accept-range, content-length, "
-            "content-range, content-encoding"
-        ),
+        # "access-control-expose-headers": (
+        #     "content-type, accept-range, content-length, "
+        #     "content-range, content-encoding"
+        # ),
     }
 
     start = 0

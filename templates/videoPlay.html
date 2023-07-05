@@ -2,9 +2,11 @@
 block content %}
 
 <div class="container">
-  <video class="container object-fit-fill" controls>
-    <source src="/videos/stream/{{ sku }}" type="video/mp4" />
-  </video>
+  <video
+    class="container object-fit-fill"
+    src="/videos/stream/{{ sku }}"
+    controls
+  ></video>
 </div>
 
 {% endblock %}
