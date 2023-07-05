@@ -4,6 +4,8 @@
 
 service file format
 
+Create this file `myapp.service` in `/etc/systemd/system` with `nano` or `vim`
+
 ```
 [Unit]
 Description=My Simple App
