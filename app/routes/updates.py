@@ -1,11 +1,11 @@
 import os
 import requests
-from fastapi import APIRouter, Request, Depends, HTTPException, status
+from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from ..database import crud, schemas
+from ..database import crud
 from ..database.database import get_db
 
 
